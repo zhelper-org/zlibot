@@ -1,0 +1,120 @@
+<!DOCTYPE html><html>
+    <head>
+        <!-- Required meta tags -->
+    <!--nobanner-->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="Cache-Control" content="no-transform">
+            <meta name="keywords" content="电子书,电子书搜索,电子书搜索引擎,电子书下载,书籍搜索,书籍下载,TheFuture" />
+              <meta name="description" content="Zlibot服是为读书爱好者们打造的电子书搜索客服，只需输入书名客服将会为您寻找想看的书籍，帮助您获取书籍！">
+<title>Zlibot</title>
+<style>
+    html, body {
+        height: 100%;
+    }
+    body {
+        margin: 0;
+    }
+    h1 {
+        font-size: 16px;
+        font-family: Segoe UI;
+        line-height: 20px;
+        color: whitesmoke;
+        display: table-cell;
+        padding: 13px 0px 0px 20px;
+    }
+    .heading {
+        background-color: black;
+        height: 50px;
+    }
+    .main {
+        margin: 18px;
+        border-radius: 4px;
+    }
+
+    div[role="form"]{
+        background-color: rgb(255, 204, 0);
+    }        
+    #webchat {
+        position: fixed;
+        height: calc(100% - 50px);
+        width: 100%;
+        top: 50px;
+        overflow: hidden;
+    }
+  </style>
+    </head>
+<body>
+    <div>
+        <div class="heading">
+
+            <!-- Change the h1 text to change the bot name -->    
+            <h1>Zlibot</h1>
+
+        </div>
+        <div id="webchat" role="main"></div>
+    </div>    
+  <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+  <script>
+        const styleOptions = {
+           // Add styleOptions to customize web chat canvas
+           hideUploadButton: true
+        };
+
+        // Add your BOT ID below
+        var BOT_ID = "188a470a-4337-418e-b805-80394bb09240"; 
+
+        var theURL = "https://powerva.microsoft.com/api/botmanagement/v1/directline/directlinetoken?botId=" + BOT_ID;
+        var theURL = "https://default31fced372f724722978f6a839722e7.fd.environment.api.powerplatform.com/powervirtualagents/bots/d77c24b2-854a-474c-a402-8e27468d3872/directline/token?api-version=2022-03-01-preview"
+        const store = window.WebChat.createStore(
+           {},
+           ({ dispatch }) => next => action => {
+               if (action.type === "DIRECT_LINE/CONNECT_FULFILLED") {
+                  dispatch({
+                      meta: {
+                           method: "keyboard",
+                       },
+                       payload: {
+                           activity: {
+                                 channelData: {
+                                      postBack: true,
+                                 },
+                                  //Web Chat will show the 'Greeting' System Topic message which has a trigger-phrase 'hello'
+                                  name: 'startConversation',
+                                  type: "event"
+                             },
+                        },
+                        type: "DIRECT_LINE/POST_ACTIVITY",
+                   });
+             }
+             return next(action);
+          }
+       );
+       fetch(theURL)
+            .then(response => response.json())
+            .then(conversationInfo => {
+                window.WebChat.renderWebChat(
+                    {
+                        directLine: window.WebChat.createDirectLine({
+                            token: conversationInfo.token,
+                        }),
+                        store: store,
+                        styleOptions: styleOptions
+                    },
+                    document.getElementById('webchat')
+                );
+            })
+            .catch(err => console.error("An error occurred: " + err));
+    </script>
+    <!--<div style="
+    position: fixed;
+    z-index: 999;
+    background: bisque;
+    height: auto;
+    text-align: center;
+    left: 0px; 
+    top: 50px;
+    padding: 10px;
+
+">寻书客服为您寻找的书籍内容均来自互联网分享站点所提供的公开引用资源，通过从互联网上的第三方站点下载并通过OneDrive网盘的方式发送给您，书籍资源均来自第三方网站，我们本身不存储资源。详情请阅读我们的<a href="https://www.notion.so/TheFuture-5a4169805de049d383a4eee46b03d105">权利申明</a></div>-->
+</body></html>
